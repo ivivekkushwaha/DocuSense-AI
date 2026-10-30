@@ -1,0 +1,22 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: docu-sense-postgres
+    restart: unless-stopped
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Vivek@2005
+      POSTGRES_DB: docusense
+    volumes:
+        - pg_data:/var/lib/postgresql/data
+        - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d docusense"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+volumes:
+  pg_data:
+
